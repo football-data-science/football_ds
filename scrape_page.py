@@ -1,11 +1,16 @@
-import sys
-import json
-import lxml.html
-import requests
-from urllib.parse import urlparse
-from pathlib import Path
 import pandas as pd
 import re
+
+COLUMN_LIST_MAP = {
+    'Performance_Gls': 'summary',
+    'Medium_Att': 'passing',
+    'Pass Types_TB': 'passing_types',
+    'Tackles_Mid 3rd': 'defense',
+    'Carries_PrgDist': 'possession',
+    'Aerial Duels_Lost': 'misc',
+    'Shot Stopping_Saves': 'goalkeepers',
+    'Body Part': 'shots'
+}
 
 class Match:
 
@@ -14,18 +19,12 @@ class Match:
         self.raw_tables = []
         self.home_team = home
         self.away_team = away
-        self.summary = []
-        self.passing= []
-        self.passing_types = []
-        self.misc = []
-        self.defense = []
-        self.posession = []
-        self.goalkeepers =[]
         self.lineup = []
         self.non_lineup = []
         self.semi_cleaned =[]
-        self.shots = []
         self.others = []
+        self.cleaned_stats = [{'home':self.home_team,'away':self.away_team},{'lineup':self.lineup}]
+
 
     def read_table(self):
         self.raw_tables = pd.read_html(self.url)
@@ -101,24 +100,13 @@ class Match:
                     team_name = 'Combined shots'
                 else:
                     team_name = table['Squad'].mode()[0]
-            if 'Performance_Gls' in col_names:
-                self.summary.append({team_name:table})
-            elif 'Medium_Att' in col_names:
-                self.passing.append({team_name:table})
-            elif 'Pass Types_TB' in col_names:
-                self.passing_types.append({team_name:table})
-            elif 'Tackles_Mid 3rd' in col_names:
-                self.defense.append({team_name:table})
-            elif 'Carries_PrgDist' in col_names:
-                self.posession.append({team_name:table})
-            elif 'Aerial Duels_Lost' in col_names:
-                self.misc.append({team_name:table})
-            elif 'Shot Stopping_Saves' in col_names:
-                self.goalkeepers.append({team_name:table})
-            elif 'Body Part' in col_names:
-                self.shots.append({team_name:table})
-            else:
-                self.others.append({team_name:table})
+
+            for key in COLUMN_LIST_MAP.keys():
+                if key in col_names:
+                    self.cleaned_stats.append\
+                        ({f'{team_name}_{COLUMN_LIST_MAP[key]}':table})
+                else:
+                    self.others.append({team_name:table})
                 
     def run_all(self):
         self.read_table()

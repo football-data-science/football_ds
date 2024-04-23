@@ -3,10 +3,16 @@ def json_loader(self):
         load_json = json.load(f)
 
 
-URL = "https://fbref.com/en/comps/9/schedule/Premier-League-Scores-and-Fixtures"
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36"
-}   
-dir = Path(__file__).parent 
-RAW_DATA_PATH = dir /'raw_data/match_links.json'
+"""
+Process:
+1. Load the links using a json loader.
+2. for each dictionary in the list, dict['home'],dict['away'],dict['url'] need
+to be passed in to create object of class match
+3. 
 
+
+
+
+
+
+"""
