@@ -1,5 +1,6 @@
 import pandas as pd
 import re
+import json
 
 COLUMN_LIST_MAP = {
     'Performance_Gls': 'summary',
@@ -104,9 +105,9 @@ class Match:
             for key in COLUMN_LIST_MAP.keys():
                 if key in col_names:
                     self.cleaned_stats.append\
-                        ({f'{team_name}_{COLUMN_LIST_MAP[key]}':table})
+                        ({f'{team_name}_{COLUMN_LIST_MAP[key]}': table.to_json(orient='records')})
                 else:
-                    self.others.append({team_name:table})
+                    self.others.append({team_name: table.to_json(orient='records')})
                 
     def run_all(self):
         self.read_table()
@@ -114,4 +115,5 @@ class Match:
         self.split_tables()
         self.table_merger()
         self.table_sorter()
-            
+        return self.cleaned_stats
+    
