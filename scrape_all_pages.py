@@ -16,7 +16,7 @@ def scrape_all_pages():
 
     all_matches_data = []
     count = 0
-    for each_match in raw_links[:5]:
+    for each_match in raw_links:
         print("creating match object")
         match_object = Match(each_match['home'],each_match['away'],each_match['link'])
         print('home team: ', match_object.home_team,'away team:', match_object.away_team)
