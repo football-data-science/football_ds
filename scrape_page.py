@@ -14,7 +14,9 @@ COLUMN_LIST_MAP = {
 }
 
 class Match:
-
+    """
+    Match class
+    """
     def __init__(self,home,away,url):
         self.url = url
         self.raw_tables = []
