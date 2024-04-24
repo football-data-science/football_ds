@@ -24,7 +24,7 @@ class Match:
         self.non_lineup = []
         self.semi_cleaned =[]
         self.others = []
-        self.cleaned_stats = [{'home':self.home_team,'away':self.away_team},{'lineup':self.lineup}]
+        self.cleaned_stats = [{'home':self.home_team,'away':self.away_team}]
 
 
     def read_table(self):
@@ -45,7 +45,6 @@ class Match:
             is_multilevel = isinstance(table.columns, pd.MultiIndex)
             if is_multilevel:
                 table.columns = self.transform_levels(table.columns)        
-    
 
     def split_tables(self):
         
@@ -105,15 +104,21 @@ class Match:
             for key in COLUMN_LIST_MAP.keys():
                 if key in col_names:
                     self.cleaned_stats.append\
-                        ({f'{team_name}_{COLUMN_LIST_MAP[key]}': table.to_json(orient='records')})
+                        ({f'{team_name}_{COLUMN_LIST_MAP[key]}': \
+                          json.loads(table.to_json(orient='records'))})
                 else:
-                    self.others.append({team_name: table.to_json(orient='records')})
+                    self.others.append({team_name: \
+                                        json.loads(table.\
+                                                   to_json(orient='records'))})
                 
     def run_all(self):
         self.read_table()
         self.level_transformer()
         self.split_tables()
         self.table_merger()
+        self.cleaned_stats.append({'lineup': \
+                                   [json.loads(df.\
+                                               to_json(orient='records')) \
+                                                for df in self.lineup]})
         self.table_sorter()
         return self.cleaned_stats
-    

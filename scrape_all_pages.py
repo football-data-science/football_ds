@@ -16,18 +16,16 @@ def scrape_all_pages():
 
     all_matches_data = []
     count = 0
-    for each_match in raw_links:
+    for each_match in raw_links[:5]:
         print("creating match object")
         match_object = Match(each_match['home'],each_match['away'],each_match['link'])
         print('home team: ', match_object.home_team,'away team:', match_object.away_team)
         cleaned_data = match_object.run_all()
         print('run successful')
-        if count <= 3:
-            print(cleaned_data)
         all_matches_data.append(cleaned_data)
         count += 1
         print(f'scraped {count} matches')
-        time.sleep(1)
+        time.sleep(5)
 
     with open(FIN_DATA_PATH,"w") as f:
         json.dump(all_matches_data, f, indent=1)  

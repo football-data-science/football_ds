@@ -9,6 +9,7 @@ URL = "https://fbref.com/en/comps/9/schedule/Premier-League-Scores-and-Fixtures"
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36"
 }   
+
 dir = Path(__file__).parent 
 RAW_DATA_PATH = dir /'raw_data/match_links.json'
 
@@ -30,7 +31,8 @@ class Get_links:
 
         Parameters:
             * rel_url:      a URL or fragment
-            * current_url:  a complete URL used to make the request that contained a link to rel_url
+            * current_url:  a complete URL used to make the request that 
+            contained a link to rel_url
 
         Returns:
             A full URL with protocol & domain that refers to rel_url.
@@ -83,7 +85,8 @@ class Get_links:
     def run_all(self):
         self.get_links()
         self.json_creator()
-        print(f"successfully created the links json and stored in {RAW_DATA_PATH} ")
+        print(f"successfully created the links json and stored in \
+              {RAW_DATA_PATH} ")
 
 if __name__ == "__main__":
     page = Get_links(URL, RAW_DATA_PATH)
